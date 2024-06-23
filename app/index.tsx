@@ -1,7 +1,8 @@
 import React from "react";
-import { Alert, Button, StyleSheet, Text, View } from "react-native";
+import { Alert, Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import { useRouter } from "expo-router";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 
 export default function LoginScreen (){
@@ -13,13 +14,24 @@ export default function LoginScreen (){
     
       return (
         <View style={styles.container}>
+          <Ionicons name="finger-print-outline" size={80} color="black" />
             <Text style={styles.textStyle}>Login using Face and Voice Recognition</Text>
             <View style={styles.buttonContainer}>
-                <Button
-                title="Login"
-                onPress={handleLoginPress}
-                color="#1e90ff"
-                />
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#023047",
+                padding: 10,
+                borderRadius:100
+              }}
+              onPress={handleLoginPress}
+            >
+              <Text style={{
+                color: "white",
+                textAlign: "center",
+                fontWeight: "bold",
+                textTransform:"uppercase"
+              }}>Start</Text>
+                </TouchableOpacity>
             </View>
             <StatusBar style="auto" />
         </View>
@@ -35,6 +47,8 @@ const styles = StyleSheet.create({
     },
     textStyle: {
       marginBottom: 20, 
+      fontSize: 30,
+      textAlign:"center"
     },
     buttonContainer: {
       width: '80%', 

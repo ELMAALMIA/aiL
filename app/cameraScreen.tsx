@@ -2,13 +2,18 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { CameraType } from 'expo-camera/build/legacy/Camera.types';
 import { useRef, useState } from 'react';
 import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Feather from '@expo/vector-icons/Feather';
+import { useRouter } from 'expo-router';
 
 export default function CameraScreen() {
   const [facing, setFacing] = useState(CameraType.front);
   const [permission, requestPermission] = useCameraPermissions();
-  const cameraRef = useRef(null);
+  const cameraRef = useRef<any>(null);
   const [imageUri, setImageUri] = useState(null);  // State to hold the captured image URI
+  const router = useRouter();
+
 
   const takePicture = async () => {
     if (cameraRef.current) {
@@ -32,37 +37,40 @@ export default function CameraScreen() {
     );
   }
 
-  function toggleCameraFacing() {
-    console.log("flip")
-    setFacing(current => (current == CameraType.front ? CameraType.front : CameraType.back));
-  }
-
-  
-
   return (
 
         
            imageUri ? (
-      <SafeAreaView>
-
             <View style={styles.previewContainer}>
                 <Image source={{ uri: imageUri }} style={styles.preview} />
-                <TouchableOpacity style={styles.button} onPress={() => setImageUri(null)}>
-                    <Text style={styles.text}>Take Another</Text>
-                </TouchableOpacity>
-            </View>
-      </SafeAreaView>
+                <View style={{ flexDirection: 'row' }}>
+          <TouchableOpacity style={{
+            backgroundColor: 'black',
+            padding: 10,
+            borderRadius: 10,
+            margin: 10,
 
+                }} onPress={() => setImageUri(null)}>
+                  <Ionicons name="reload" size={24} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity style={{
+                backgroundColor: 'black',
+                padding: 10,
+                borderRadius: 10,
+                margin: 10,
+
+                }} onPress={() => router.push("audioScreen")}>
+                 <MaterialIcons name="navigate-next" size={24} color="white" />
+                </TouchableOpacity>
+                </View>
+            </View>
         ):( 
           <View style={styles.container}>
 
-          <CameraView style={styles.camera} facing={facing} ref={cameraRef}>
+          <CameraView style={styles.camera} facing={facing} ref={cameraRef} >
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-                <Text style={styles.text}>Flip</Text>
-              </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={takePicture}>
-                <Text style={styles.text}>Take</Text>
+                <Feather name="camera" size={24} color="white" />
               </TouchableOpacity>
             </View>
           </CameraView>
@@ -82,13 +90,21 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     flexDirection: 'row',
+    justifyContent: "center",
+    alignItems:"flex-end",
     backgroundColor: 'transparent',
     margin: 64,
   },
   button: {
-    flex: 1,
-    alignSelf: 'flex-end',
+    display: "flex",
+    justifyContent:"center",
     alignItems: 'center',
+    borderColor: "white",
+    borderWidth: 1,
+    height: 70,
+    width: 70,
+    borderRadius: 100,
+    padding:10
   },
   text: {
     fontSize: 24,
@@ -97,6 +113,7 @@ const styles = StyleSheet.create({
   },
   previewContainer: {
     flex: 1,
+    marginTop: 50,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
